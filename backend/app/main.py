@@ -1,16 +1,17 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.core.exceptions import AppException
-from app.utils.response import error_envelope
-from app.routers import auth
+from core.exceptions import AppException
+from utils.response import error_envelope
 
-app = FastAPI(title="AssetFlow API")
+from routers import auth, department, asset, category, allocation, transfer
+
+app = FastAPI(title="AssetFlow API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],  # tighten before demo/prod
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -18,18 +19,21 @@ app.add_middleware(
 
 
 @app.exception_handler(AppException)
-async def app_exception_handler(request: Request, exc: AppException):
+async def app_exception_handler(request, exc: AppException):
     return JSONResponse(
         status_code=exc.status_code,
-        content=error_envelope(code=exc.error_code, message=exc.message),
+        content=error_envelope(exc.error_code, exc.message, exc.detail),
     )
 
 
 app.include_router(auth.router)
+app.include_router(department.router)
+app.include_router(asset.router)
+app.include_router(category.router)
+app.include_router(allocation.router)
+app.include_router(transfer.router)
 
 
-@app.get("/")
-def home():
-    return {
-        "message": "AssetFlow API"
-    }
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
