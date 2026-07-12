@@ -5,7 +5,18 @@ from fastapi.responses import JSONResponse
 from core.exceptions import AppException
 from utils.response import error_envelope
 
-from routers import auth, department, asset, category, allocation, transfer, booking, maintenance, audit
+from routers import (
+    auth,
+    department,
+    asset,
+    category,
+    allocation,
+    transfer,
+    booking,
+    maintenance,
+    audit,
+    report,
+)
 
 app = FastAPI(title="AssetFlow API", version="1.0.0")
 
@@ -35,6 +46,7 @@ app.include_router(transfer.router)
 app.include_router(booking.router)
 app.include_router(maintenance.router)
 app.include_router(audit.router)
+app.include_router(report.router)
 
 
 @app.get("/health")
