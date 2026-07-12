@@ -1,18 +1,33 @@
 @import "tailwindcss";
 
+/* Tell Tailwind to use our manual class toggle instead of the OS preference */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  /* Enterprise Slate for surfaces */
+  /* Core Brand Palette */
+  --color-brand-rust: #B7410E;
+  --color-brand-orange: #BE5103;
+  --color-brand-yellow: #FFCE1B;
+  --color-brand-teal: #069494;
+  --color-brand-teal-hover: #057a7a;
+
+  /* Light Mode Surfaces (Clean Slate) */
   --color-surface-50: #f8fafc;
   --color-surface-100: #f1f5f9;
   --color-surface-200: #e2e8f0;
-  --color-surface-600: #475569;
-  --color-surface-900: #0f172a;
-
-  /* Primary Indigo for actions */
-  --color-primary-400: #818cf8;
-  --color-primary-500: #6366f1;
-  --color-primary-600: #4f46e5;
+  --color-surface-300: #cbd5e1;
+  --color-surface-400: #94a3b8;
   
-  /* Use Inter font */
+  /* Dark Mode Surfaces (Warm Dark) */
+  --color-surface-500: #78716c;
+  --color-surface-600: #44403c;
+  --color-surface-700: #292524;
+  --color-surface-800: #161412;
+  --color-surface-900: #0c0a09;
+  
   --font-sans: "Inter", sans-serif;
+}
+
+@utility brand-gradient {
+  background-image: linear-gradient(to right, var(--color-brand-orange), var(--color-brand-yellow), var(--color-brand-teal), var(--color-brand-rust));
 }
