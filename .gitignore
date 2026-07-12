@@ -1,0 +1,37 @@
+# --- Virtual Environment ---
+venv/
+ENV/
+env/
+
+# --- Python / Cache ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+# --- Database & Local Configs ---
+# Ignore local SQLite databases if you generate them locally
+*.db
+*.sqlite3
+# Ignore environment secret files
+.env
+
+.env.local
+
+# --- Node / Frontend ---
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# --- IDEs and System Files ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+
+
+backend/.env
