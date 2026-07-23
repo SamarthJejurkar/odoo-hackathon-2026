@@ -22,7 +22,7 @@ from schemas.audit import (
 from services.audit_service import AuditService
 from utils.response import success_envelope
 
-router = APIRouter(prefix="/api/v1/audit-cycles", tags=["Audit Cycles"])
+router = APIRouter(prefix="/audit-cycles", tags=["Audit Cycles"])
 
 
 @router.post("", response_model=dict, status_code=201)

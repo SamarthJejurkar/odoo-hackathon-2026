@@ -1,5 +1,4 @@
 from sqlalchemy.orm import Session
-
 from repositories.user_repository import UserRepository
 from schemas.user import UserCreate
 from schemas.auth import LoginRequest
@@ -22,13 +21,11 @@ class AuthService:
             department_id=payload.department_id,
         )
 
-    def login(self, payload: LoginRequest) -> str:
+    def login(self, payload: LoginRequest):
         user = self.repo.get_by_email(payload.email)
-
         if not user or not verify_password(payload.password, user.password_hash):
             raise UnauthorizedException("Invalid email or password.")
-
         if user.status != ActiveStatusEnum.ACTIVE:
             raise ForbiddenException("This account has been deactivated.")
-
-        return create_access_token(subject=str(user.id), role=user.role.value)
+        token = create_access_token(subject=str(user.id), role=user.role.value)
+        return token, user

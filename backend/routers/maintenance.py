@@ -20,7 +20,7 @@ from schemas.maintenance import (
 from services.maintenance_service import MaintenanceService
 from utils.response import success_envelope
 
-router = APIRouter(prefix="/api/v1/maintenance-requests", tags=["Maintenance"])
+router = APIRouter(prefix="/maintenance-requests", tags=["Maintenance"])
 
 
 @router.post("", response_model=dict, status_code=201)

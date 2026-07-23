@@ -15,7 +15,7 @@ from schemas.booking import BookingCancel, BookingCreate, BookingRead, Suggested
 from services.booking_service import BookingService
 from utils.response import success_envelope
 
-router = APIRouter(prefix="/api/v1/bookings", tags=["Bookings"])
+router = APIRouter(prefix="/bookings", tags=["Bookings"])
 
 
 @router.post("", response_model=dict, status_code=201)

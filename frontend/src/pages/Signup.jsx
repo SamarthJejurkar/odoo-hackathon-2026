@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { apiService } from '../services/api';
 
-export default function Login() {
+export default function Signup() {
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -12,18 +13,25 @@ export default function Login() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError(null);
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters.');
+      return;
+    }
+
     setLoading(true);
     try {
-      const data = await apiService.post('auth/login', { email, password });
-      localStorage.setItem('user', JSON.stringify({
-        token: data.access_token,
-        role: data.role,
-        userId: data.user_id,
-        fullName: data.full_name,
-      }));
-      navigate('/dashboard');
+      await apiService.post('auth/register', {
+        full_name: fullName,
+        email,
+        password,
+      });
+
+      // Registration succeeds but doesn't log you in automatically —
+      // send the user to login to authenticate with their new credentials.
+      navigate('/login');
     } catch (err) {
-      setError(err.message || 'Login failed. Please check your credentials.');
+      setError(err.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -43,14 +51,31 @@ export default function Login() {
 
         <div className="mb-8">
           <h2 className="text-2xl font-semibold dark:font-medium tracking-tight text-surface-900 dark:text-white mb-2">
-            Sign in
+            Create your account
           </h2>
           <p className="text-sm text-surface-500 dark:text-surface-400">
-            Welcome back. Please enter your details.
+            Sign up to start managing your assets.
           </p>
         </div>
 
         <form className="space-y-5" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="fullName" className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
+              Full Name
+            </label>
+            <input
+              id="fullName"
+              name="fullName"
+              type="text"
+              autoComplete="name"
+              placeholder="Jane Doe"
+              required
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="block w-full bg-white dark:bg-surface-900 border border-surface-300 dark:border-surface-700 focus:border-brand-teal focus:ring-1 focus:ring-brand-teal py-2.5 px-3 rounded-md text-sm text-surface-900 dark:text-white placeholder:text-surface-400 dark:placeholder:text-surface-600 transition-colors outline-none shadow-sm dark:shadow-none"
+            />
+          </div>
+
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
               Email
@@ -69,20 +94,15 @@ export default function Login() {
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label htmlFor="password" className="block text-sm font-medium text-surface-700 dark:text-surface-300">
-                Password
-              </label>
-              <a href="#" className="text-xs font-medium text-brand-teal hover:text-brand-teal-hover dark:hover:text-white transition-colors">
-                Forgot password?
-              </a>
-            </div>
+            <label htmlFor="password" className="block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1.5">
+              Password
+            </label>
             <input
               id="password"
               name="password"
               type="password"
-              autoComplete="current-password"
-              placeholder="••••••••"
+              autoComplete="new-password"
+              placeholder="At least 8 characters"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -100,15 +120,15 @@ export default function Login() {
               disabled={loading}
               className="w-full bg-brand-teal hover:bg-brand-teal-hover text-white py-2.5 px-4 rounded-md text-sm font-medium transition-colors shadow-sm disabled:opacity-60"
             >
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? 'Creating account...' : 'Sign up'}
             </button>
           </div>
         </form>
 
         <p className="mt-8 text-center text-sm text-surface-500 dark:text-surface-400">
-          Don't have an account?{' '}
-          <Link to="/signup" className="text-brand-teal hover:text-brand-teal-hover dark:hover:text-white font-medium transition-colors">
-            Sign up
+          Already have an account?{' '}
+          <Link to="/login" className="text-brand-teal hover:text-brand-teal-hover dark:hover:text-white font-medium transition-colors">
+            Sign in
           </Link>
         </p>
       </div>

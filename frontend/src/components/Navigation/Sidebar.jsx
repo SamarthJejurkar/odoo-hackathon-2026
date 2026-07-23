@@ -1,10 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Building2, MonitorSmartphone, ArrowRightLeft, CalendarDays, Wrench, ShieldCheck, BarChart3 } from 'lucide-react';
+import { LayoutDashboard, Building2, Users2, MonitorSmartphone, ArrowRightLeft, CalendarDays, Wrench, ShieldCheck, BarChart3 } from 'lucide-react';
 
+// allowedRoles: undefined means "any logged-in user can see this."
 const navItems = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-  { name: 'Organization', path: '/organization', icon: Building2 },
+  { name: 'Organization', path: '/organization', icon: Building2, allowedRoles: ['admin'] },
+  { name: 'Departments', path: '/departments', icon: Users2, allowedRoles: ['admin'] },
   { name: 'Assets', path: '/assets', icon: MonitorSmartphone },
   { name: 'Allocation', path: '/allocation', icon: ArrowRightLeft },
   { name: 'Booking', path: '/booking', icon: CalendarDays },
@@ -14,6 +16,11 @@ const navItems = [
 ];
 
 export default function Sidebar({ isOpen }) {
+  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  const visibleItems = navItems.filter(
+    (item) => !item.allowedRoles || (user && item.allowedRoles.includes(user.role))
+  );
+
   return (
     <aside className={`flex flex-col bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700 transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-20'} hidden md:flex flex-shrink-0 z-20`}>
       <div className="h-16 flex items-center justify-center border-b border-surface-200 dark:border-surface-700 px-4">
@@ -27,7 +34,7 @@ export default function Sidebar({ isOpen }) {
 
       <nav className="flex-1 overflow-y-auto py-6 px-3 space-y-1">
         {isOpen && <p className="px-3 text-xs font-semibold uppercase tracking-wider text-surface-400 dark:text-surface-500 mb-4">Modules</p>}
-        {navItems.map((item) => {
+        {visibleItems.map((item) => {
           const Icon = item.icon;
           return (
             <NavLink

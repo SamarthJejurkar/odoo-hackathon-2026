@@ -14,7 +14,7 @@ from schemas.transfer import TransferCreate, TransferRead, TransferRejection
 from services.transfer_service import TransferService
 from utils.response import success_envelope
 
-router = APIRouter(prefix="/api/v1/transfers", tags=["Transfers"])
+router = APIRouter(prefix="/transfers", tags=["Transfers"])
 
 
 @router.post("", response_model=dict, status_code=201)

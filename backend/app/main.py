@@ -16,6 +16,7 @@ from routers import (
     maintenance,
     audit,
     report,
+    users,
 )
 
 app = FastAPI(title="AssetFlow API", version="1.0.0")
@@ -47,6 +48,7 @@ app.include_router(booking.router)
 app.include_router(maintenance.router)
 app.include_router(audit.router)
 app.include_router(report.router)
+app.include_router(users.router)
 
 
 @app.get("/health")
